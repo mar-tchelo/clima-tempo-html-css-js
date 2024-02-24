@@ -3,7 +3,9 @@ document.querySelector("#search").addEventListener("submit", async (event) => {
 
   const cityName = document.querySelector("#city_name").value;
   if (!cityName) {
-    return showAlert("Você precisa digitar uma cidade...");
+    document.querySelector("#weather").classList.remove("show");
+    showAlert("Você precisa digitar uma cidade...");
+    return;
   }
 
   const apiKey = "cc2c972d11406cfe14c120fd8f603739";
@@ -27,48 +29,49 @@ document.querySelector("#search").addEventListener("submit", async (event) => {
       humidity: json.main.humidity + "%",
     });
   } else {
-    showAlert("Não foi possível localizar...");
+    document.querySelector("#weather").classList.remove("show");
+    showAlert(`Não foi possível localizar...
+    <img src="src/img/404.svg" alt="404 error" >    
+    `);
   }
 });
 
 function showInfo(json) {
   showAlert("");
 
-document.querySelector("#weather").classList.add("show");
+  document.querySelector("#weather").classList.add("show");
 
-document.querySelector("#title").innerHTML = `${json.city}, ${json.country}`;
+  document.querySelector("#title").innerHTML = `${json.city}, ${json.country}`;
 
-document
-  .querySelector("#temp_value").innerHTML = `${json.temp
-  .toFixed(1)
-  .toString()
-  .replace(".", ",")}<sup>Cº</sup> `;
-
-document.querySelector("#temp_description").innerHTML = `${json.description}`;
-
-document
-  .querySelector("#temp_img")
-  .setAttribute(
-    "src",
-    `https://openweathermap.org/img/wn/${json.tempIcon}@2x.png`
-  );
-
-
-document.querySelector("#temp_max").innerHTML = `${json.tempMax
+  document.querySelector("#temp_value").innerHTML = `${json.temp
     .toFixed(1)
     .toString()
     .replace(".", ",")}<sup>Cº</sup> `;
 
-document.querySelector("#temp_min").innerHTML = `${json.tempMin
-  .toFixed(1)
-  .toString()
-  .replace(".", ",")}<sup>Cº</sup> `;  
+  document.querySelector("#temp_description").innerHTML = `${json.description}`;
 
-document.querySelector("#humidity").innerHTML = `${json.tempMin}% `;  
+  document
+    .querySelector("#temp_img")
+    .setAttribute(
+      "src",
+      `https://openweathermap.org/img/wn/${json.tempIcon}@2x.png`
+    );
 
-document.querySelector("#wind").innerHTML = `${json.tempMin
-  .toFixed(1)} km/h `;  
+  document.querySelector("#temp_max").innerHTML = `${json.tempMax
+    .toFixed(1)
+    .toString()
+    .replace(".", ",")} <sup>C°</sup>`;
+    
+  document.querySelector("#temp_min").innerHTML = `${json.tempMin
+    .toFixed(1)
+    .toString()
+    .replace(".", ",")} <sup>C°</sup>`;
 
+  document.querySelector("#humidity").innerHTML = `${json.tempMin}% `;
+
+  document.querySelector("#wind").innerHTML = `${json.windSpeed.toFixed(
+    1
+  )}km/h`;
 }
 
 function showAlert(msg) {
